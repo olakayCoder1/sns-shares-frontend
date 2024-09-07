@@ -80,9 +80,9 @@ const CustomerTable = ({ search_url }: Props) => {
                                     onClick={() => router.push(`/customers/${customer.id}?${search_url}`)}
                                 >
                                     <TableCell>{customer.id}</TableCell>
-                                    <TableCell>{customer.ads}</TableCell>
-                                    <TableCell>{customer.userid}</TableCell>
-                                    <TableCell>{customer.password}</TableCell>
+                                    <TableCell>{customer.provider}</TableCell>
+                                    <TableCell>{customer.youtube_project_id}</TableCell>
+                                    <TableCell>{customer.youtube_client_id}</TableCell>
                                     <TableCell>{moment(customer?.created_at).format('YYYY/MM/DD  HH:mm')}</TableCell>
                                     <TableCell>
                                         <Link href={`/snsaccounts/${customer.id}?${search_url}`} color='secondary'>

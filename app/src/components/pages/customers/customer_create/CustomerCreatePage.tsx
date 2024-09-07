@@ -1,5 +1,6 @@
-import { FormEvent, useEffect } from 'react';
-import { postRequest } from '@/utils/axios';
+"use client"
+import { FormEvent, useEffect, useState } from 'react';
+import { postRequest, getRequest } from '@/utils/axios';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { clearCurrentItem, setError } from '@/store/features/customer';
 
@@ -10,21 +11,55 @@ import MainLayout from '@/components/templates/layout/MainLayout';
 import TitleBar from '@/components/atoms/TitleBar';
 import MainPannel from '@/components/atoms/MainPannel';
 import CustomerForm from './sections/CustomerForm';
+import Loader from '@/components/Loader';
+import { useSearchParams } from 'next/navigation';
 
 const CustomerCreatePage = () => {
     const dispatch = useAppDispatch();
+    const [data, setData] = useState<any>(null);
+    const searchParams = useSearchParams();
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const queryParams = new URLSearchParams(searchParams.toString());
 
     const currentItem = useAppSelector(state => state.customer.item.form);
 
     useEffect(() => {
+        // Clear form data when the component loads
         dispatch(clearCurrentItem());
-    }, []);
+
+        // Function to fetch data
+        const fetchData = async () => {
+            if (queryParams.toString()) {
+                setLoading(true); // Show loader
+                try {
+                    const res = await getRequest(`/v0/customers/create/callback?${queryParams}`);
+                    if (res.status === 200){
+                        console.log(res.data)
+                    }else{
+                        dispatch(setError(res.data.errors));
+                    }
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                } finally {
+                    setLoading(false);
+                }
+            }
+        };
+
+        fetchData();
+    }, [searchParams]);
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
 
-        const res = await postRequest(`/v0/customers/create`, currentItem);
-        if (res.status == 200) {
+        const res = await postRequest(`/v0/customers/create/sns`, currentItem);
+        if (res.status === 200) {
+            const { redirectUrl } = res.data;
+
+            if (redirectUrl) {
+                window.location.href = redirectUrl;
+            }
             dispatch(clearCurrentItem());
         }
 
@@ -40,16 +75,22 @@ const CustomerCreatePage = () => {
                     <TitleBar href='/snsaccounts'>SNSアカウント登録</TitleBar>
 
                     <MainPannel>
-                        <form className='w-full max-w-[600px] flex flex-col gap-[10px]' onSubmit={handleSubmit}>
-                            <CustomerForm />
+                        {loading ? (
+                            <Loader message="Validating credentials..." /> // Show loader with message
+                        ) : (
+                            <form className='w-full max-w-[600px] flex flex-col gap-[10px]' onSubmit={handleSubmit}>
+                                <CustomerForm />
 
-                            {/* ************************************************************************ */}
-                            <div className='mt-[16px]'>
-                                <Button type='submit' variant='contained' color='secondary'>
-                                    登録する
-                                </Button>
-                            </div>
-                        </form>
+                                {/* Show fetched data if needed */}
+                                {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
+
+                                <div className='mt-[16px]'>
+                                    <Button type='submit' variant='contained' color='secondary'>
+                                        登録する
+                                    </Button>
+                                </div>
+                            </form>
+                        )}
                     </MainPannel>
                 </MainLayout>
             </PermissionLayout>

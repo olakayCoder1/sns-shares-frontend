@@ -53,7 +53,7 @@ const MemoForm = () => {
             </div>
 
             <div>
-                <Timeline
+                {/* <Timeline
                     position='left'
                     sx={{
                         [`& .${timelineItemClasses.root}:before`]: {
@@ -118,7 +118,7 @@ const MemoForm = () => {
                             </TimelineContent>
                         </TimelineItem>
                     ))}
-                </Timeline>
+                </Timeline> */}
             </div>
 
             <MemoDialog open={currentDialog} handleClose={() => setCurrentDialog(false)} />

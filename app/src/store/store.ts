@@ -18,6 +18,7 @@ import mail_template from './features/mail_template';
 import mail from './features/mail';
 import mail_inbox from './features/mail_inbox';
 import backup from './features/backup';
+import new_post from './features/new_post';
 
 export const store = configureStore({
     reducer: {
@@ -36,7 +37,8 @@ export const store = configureStore({
         mail_template,
         mail,
         mail_inbox,
-        backup
+        backup,
+        new_post
     },
     devTools: process.env.NODE_ENV !== 'production',
     middleware: getDefaultMiddleware =>

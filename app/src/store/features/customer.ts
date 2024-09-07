@@ -9,6 +9,9 @@ type State = {
             email: string;
             userid: string;
             api_key: string;
+            google_client_id: string;
+            google_client_secret: string;
+            google_project_id: string;
             password: string;
             ads: string;
             status: number;
@@ -44,6 +47,9 @@ const initialState: State = {
             userid: '',
             api_key: '',
             password: '',
+            google_project_id: '',
+            google_client_id: '',
+            google_client_secret: '',
             ads: '',
             status: 0,
         },
@@ -70,7 +76,7 @@ const initialState: State = {
 };
 
 export const fetchCustomers = createAsyncThunk('customer/fetchCustomers', async (filter: any) => {
-    const res = await getRequest('/v0/customers', filter);
+    const res = await getRequest('/v0/customers/sns', filter);
     return res;
 });
 
