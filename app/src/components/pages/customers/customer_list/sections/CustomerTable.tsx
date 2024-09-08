@@ -45,14 +45,14 @@ const CustomerTable = ({ search_url }: Props) => {
                             </TableCell>
                             <TableCell style={{ minWidth: 130 }}>
                                 <SorterItem
-                                    label='User ID'
+                                    label='User'
                                     value='userid'
                                     current={filter.order_by}
                                 />
                             </TableCell>
                             <TableCell style={{ minWidth: 100 }}>
                                 <SorterItem
-                                    label='Password'
+                                    label='Name'
                                     value='password'
                                     current={filter.order_by}
                                 />
@@ -68,8 +68,9 @@ const CustomerTable = ({ search_url }: Props) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {result.data.map(customer => {
+                        {result.data.map((customer, index) => {
                             
+                            const countNumber = index + 1;
                             return (
                                 <TableRow
                                     hover
@@ -77,12 +78,12 @@ const CustomerTable = ({ search_url }: Props) => {
                                     tabIndex={-1}
                                     key={customer.id}
                                     className=' hover:cursor-pointer'
-                                    onClick={() => router.push(`/customers/${customer.id}?${search_url}`)}
+                                    onClick={() => router.push(`/snsaccounts/${customer.id}?${search_url}`)}
                                 >
-                                    <TableCell>{customer.id}</TableCell>
+                                    <TableCell>{countNumber}</TableCell>
                                     <TableCell>{customer.provider}</TableCell>
-                                    <TableCell>{customer.youtube_project_id}</TableCell>
-                                    <TableCell>{customer.youtube_client_id}</TableCell>
+                                    <TableCell>{customer?.added_by?.email || ""}</TableCell>
+                                    <TableCell>{customer?.name}</TableCell>
                                     <TableCell>{moment(customer?.created_at).format('YYYY/MM/DD  HH:mm')}</TableCell>
                                     <TableCell>
                                         <Link href={`/snsaccounts/${customer.id}?${search_url}`} color='secondary'>

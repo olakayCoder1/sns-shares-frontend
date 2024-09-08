@@ -10,10 +10,11 @@ import MainLayout from '@/components/templates/layout/MainLayout';
 import TitleBar from '@/components/atoms/TitleBar';
 import MainPannel from '@/components/atoms/MainPannel';
 import UserForm from './sections/UserForm';
+import { useAuth } from '@/contexts/AuthContext';
 
 const UserCreatePage = () => {
     const dispatch = useAppDispatch();
-
+    const { setPending } = useAuth();
     const currentItem = useAppSelector(state => state.user.item.form);
 
     useEffect(() => {
@@ -22,7 +23,7 @@ const UserCreatePage = () => {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-
+        setPending!(true);
         const res = await postRequest(`/v0/admin/users/create`, currentItem);
         if (res.status == 200) {
             dispatch(clearCurrentItem());
@@ -31,6 +32,7 @@ const UserCreatePage = () => {
         if (res.status == 422 && res.data.errors) {
             dispatch(setError(res.data.errors));
         }
+        setPending!(false);
     };
 
     return (

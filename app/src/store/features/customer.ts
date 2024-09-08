@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice , PayloadAction} from '@reduxjs/toolkit';
 import { ICustomer, IName } from '@/interfaces';
 import { getRequest } from '@/utils/axios';
 
@@ -7,6 +7,7 @@ type State = {
         form: {
             id?: number;
             email: string;
+            name: string;
             userid: string;
             api_key: string;
             google_client_id: string;
@@ -20,6 +21,7 @@ type State = {
         next: number;
         errors: any;
     };
+    errors: Record<string, string>;
     items: {
         filter: {
             [key: string]: any;
@@ -46,6 +48,7 @@ const initialState: State = {
             email: '',
             userid: '',
             api_key: '',
+            name: '',
             password: '',
             google_project_id: '',
             google_client_id: '',
@@ -57,6 +60,7 @@ const initialState: State = {
         next: 0,
         errors: {}
     },
+    errors: {},
     items: {
         filter: {
             keyword: '',
@@ -108,11 +112,15 @@ export const slice = createSlice({
                 }
             };
         },
-        setError: (state: State, action) => {
-            state.item = {
-                ...state.item,
-                errors: action.payload
-            };
+        // setError: (state: State, action) => {
+        //     state.item = {
+        //         ...state.item,
+        //         errors: action.payload
+        //     };
+        // },
+        setError: (state: State, action: PayloadAction<Record<string, string>>) => {
+            console.log('setError action dispatched with payload:', action.payload);
+            state.errors = action.payload;
         },
         clearError: (state: State) => {
             state.item = {

@@ -13,8 +13,10 @@ import MainPannel from '@/components/atoms/MainPannel';
 import CustomerForm from './sections/CustomerForm';
 import Loader from '@/components/Loader';
 import { useSearchParams } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 
 const CustomerCreatePage = () => {
+    const { setPending } = useAuth();
     const dispatch = useAppDispatch();
     const [data, setData] = useState<any>(null);
     const searchParams = useSearchParams();
@@ -31,11 +33,14 @@ const CustomerCreatePage = () => {
         // Function to fetch data
         const fetchData = async () => {
             if (queryParams.toString()) {
-                setLoading(true); // Show loader
+                setPending!(true);
+                // setLoading(true); // Show loader
                 try {
                     const res = await getRequest(`/v0/customers/create/callback?${queryParams}`);
                     if (res.status === 200){
                         console.log(res.data)
+                        const newUrl = window.location.pathname;
+                        window.history.replaceState(null, '', newUrl);
                     }else{
                         dispatch(setError(res.data.errors));
                     }
@@ -43,6 +48,7 @@ const CustomerCreatePage = () => {
                     console.error('Error fetching data:', error);
                 } finally {
                     setLoading(false);
+                    setPending!(false);
                 }
             }
         };
@@ -63,8 +69,8 @@ const CustomerCreatePage = () => {
             dispatch(clearCurrentItem());
         }
 
-        if (res.status == 422 && res.data.errors) {
-            dispatch(setError(res.data.errors));
+        if (res.status == 400 && res.data) {
+            dispatch(setError(res.data));
         }
     };
 

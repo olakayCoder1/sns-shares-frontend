@@ -27,7 +27,7 @@ const CustomerEditPage = () => {
     const currentItem = useAppSelector(state => state.customer.item.form);
 
     useEffect(() => {
-        dispatch(fetchCustomer(`${id}?${params.toString()}`));
+        dispatch(fetchCustomer(`sns/${id}?${params.toString()}`));
 
         return () => {
             dispatch(clearCurrentItem());
@@ -37,18 +37,18 @@ const CustomerEditPage = () => {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
 
-        const res = await patchRequest(`/v0/customers/${id}`, currentItem);
+        const res = await patchRequest(`/v0/customers/sns/${id}`, currentItem);
         if (res.status == 200) {
             dispatch(clearError());
         }
 
-        if (res.status == 422 && res.data.errors) {
-            dispatch(setError(res.data.errors));
+        if (res.status == 422 && res.data) {
+            dispatch(setError(res.data));
         }
     };
 
     const handleDelete = async () => {
-        const res = await deleteRequest(`/v0/customers/${id}`, null);
+        const res = await deleteRequest(`/v0/customers/sns/${id}`, null);
         if (res.status == 200) {
             dispatch(clearError());
             router.push('/customers');

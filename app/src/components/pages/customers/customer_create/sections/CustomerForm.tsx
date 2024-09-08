@@ -10,7 +10,7 @@ const CustomerForm = () => {
     const dispatch = useAppDispatch();
 
     const currentItem = useAppSelector(state => state.customer.item.form);
-    const errors = useAppSelector(state => state.customer.item.errors);
+    const errors = useAppSelector(state => state.customer.errors);
     const shared_data = useAppSelector(state => state.shared_data);
 
     // State to manage the selected social type
@@ -37,21 +37,36 @@ const CustomerForm = () => {
                         fullWidth
                         value={selectedSocialType}
                         onChange={handleSocialTypeChange}
-                        error={errors.ads ? true : false}
+                        // error={errors.ads ? true : false}
+                        error={Boolean(errors?.ads)}
                     >
                         <MenuItem value={"YOUTUBE"}>Youtube</MenuItem>
                         <MenuItem value={"1"}>Tiktok</MenuItem>
                         {/* <MenuItem value={"2"}>Instagram</MenuItem> */}
                     </Select>
 
-                    {errors.ads && (
-                        <p className='text-[12px] mt-[4px] ml-[14px] text-[#f44336]'>{errors.ads}</p>
+                    {errors?.ads && (
+                        <p className='text-[12px] mt-[4px] ml-[14px] text-[#f44336]'>{errors?.ads}</p>
                     )}
                 </div>
             </div>
 
             {selectedSocialType === "YOUTUBE" ? (
                 <> 
+                <div className='flex flex-col sm:flex-row sm:items-start gap-[4px] sm:gap-[16px]'>
+                    <FormLabel className='min-w-[134px] mt-[10px]'>Name</FormLabel>
+                    <div className='w-full flex gap-[8px]'>
+                        <TextField
+                            size='small'
+                            fullWidth
+                            value={currentItem.name}
+                            onChange={e => dispatch(setCurrentItemValue({ name: e.target.value }))}
+                            error={errors?.name ? true : false}
+                            helperText={errors?.name ? errors.name : ''}
+                        />
+                    </div>
+                </div>
+
                 <div className='flex flex-col sm:flex-row sm:items-start gap-[4px] sm:gap-[16px]'>
                     <FormLabel className='min-w-[134px] mt-[10px]'>Google Client ID</FormLabel>
                     <div className='w-full flex gap-[8px]'>
@@ -60,8 +75,8 @@ const CustomerForm = () => {
                             fullWidth
                             value={currentItem.google_client_id}
                             onChange={e => dispatch(setCurrentItemValue({ google_client_id: e.target.value }))}
-                            error={errors.google_client_id ? true : false}
-                            helperText={errors.google_client_id ? errors.google_client_id : ''}
+                            error={errors?.google_client_id ? true : false}
+                            helperText={errors?.google_client_id ? errors.google_client_id : ''}
                         />
                     </div>
                 </div>
@@ -73,8 +88,8 @@ const CustomerForm = () => {
                             fullWidth
                             value={currentItem.google_client_secret}
                             onChange={e => dispatch(setCurrentItemValue({ google_client_secret: e.target.value }))}
-                            error={errors.google_client_secret ? true : false}
-                            helperText={errors.google_client_secret ? errors.google_client_secret : ''}
+                            error={errors?.google_client_secret ? true : false}
+                            helperText={errors?.google_client_secret ? errors.google_client_secret : ''}
                         />
                     </div>
                 </div>
@@ -86,8 +101,8 @@ const CustomerForm = () => {
                             fullWidth
                             value={currentItem.google_project_id}
                             onChange={e => dispatch(setCurrentItemValue({ google_project_id: e.target.value }))}
-                            error={errors.google_project_id ? true : false}
-                            helperText={errors.google_project_id ? errors.google_project_id : ''}
+                            error={errors?.google_project_id ? true : false}
+                            helperText={errors?.google_project_id ? errors.google_project_id : ''}
                         />
                     </div>
                 </div>
@@ -102,8 +117,8 @@ const CustomerForm = () => {
                         fullWidth
                         value={currentItem.userid}
                         onChange={e => dispatch(setCurrentItemValue({ userid: e.target.value }))}
-                        error={errors.userid ? true : false}
-                        helperText={errors.userid ? errors.userid : ''}
+                        error={errors?.userid ? true : false}
+                        helperText={errors?.userid ? errors.userid : ''}
                     />
                 </div>
             </div>
@@ -116,8 +131,8 @@ const CustomerForm = () => {
                         fullWidth
                         value={currentItem.password}
                         onChange={e => dispatch(setCurrentItemValue({ password: e.target.value }))}
-                        error={errors.password ? true : false}
-                        helperText={errors.password ? errors.password : ''}
+                        error={errors?.password ? true : false}
+                        helperText={errors?.password ? errors.password : ''}
                     />
                 </div>
             </div>
@@ -130,8 +145,8 @@ const CustomerForm = () => {
                         fullWidth
                         value={currentItem.api_key}
                         onChange={e => dispatch(setCurrentItemValue({ api_key: e.target.value }))}
-                        error={errors.api_key ? true : false}
-                        helperText={errors.api_key ? errors.api_key : ''}
+                        error={errors?.api_key ? true : false}
+                        helperText={errors?.api_key ? errors.api_key : ''}
                     />
                 </div>
             </div>

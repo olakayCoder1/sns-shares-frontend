@@ -9,10 +9,12 @@ import MainPannel from '@/components/atoms/MainPannel';
 import PostForm from './sections/PostForm';
 import {clearCurrentItem, setError } from '@/store/features/new_post';
 import { postFormdata } from '@/utils/axios';
+import { useAuth } from '@/contexts/AuthContext';
 
 
 
 const NewPost = () => {
+    const { setPending } = useAuth();
     const dispatch = useAppDispatch();
     const form = useAppSelector(state => state.new_post.form);
     const [currentStatus, setCurrentStatus] = useState(false);
@@ -22,6 +24,8 @@ const NewPost = () => {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
 
+
+        
         // Construct FormData object
         const formData = new FormData();
         formData.append('title', form.title);
@@ -40,6 +44,8 @@ const NewPost = () => {
         }
 
         try {
+            setPending!(true);
+            setCurrentStatus(true);
             const res = await postFormdata(`/v0/customers/post/dispatch`, formData);
             if (res.status === 200) {
                 console.log(res.data);
@@ -53,6 +59,7 @@ const NewPost = () => {
             console.error('Error fetching data:', error);
         } finally {
             setCurrentStatus(false);
+            setPending!(false);
         }
     };
 
