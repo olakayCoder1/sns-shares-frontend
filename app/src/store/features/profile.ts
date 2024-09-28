@@ -10,6 +10,9 @@ type State = {
             email: string;
             phone: string;
             role: number;
+            is_youtube: boolean;
+            is_instagram: boolean;
+            is_tiktok: boolean;
         };
         errors: any;
     };
@@ -24,6 +27,9 @@ const initialState: State = {
             first_name_furi: '',
             email: '',
             phone: '',
+            is_youtube: false,
+            is_instagram: false,
+            is_tiktok: false,
             role: 0
         },
         errors: {}

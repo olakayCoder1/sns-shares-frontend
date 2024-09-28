@@ -79,7 +79,7 @@ const CustomerForm = () => {
             </div>
 
             {/* ************************************************************************ */}
-            <div className='flex flex-col sm:flex-row sm:items-start gap-[4px] sm:gap-[16px]'>
+            {/* <div className='flex flex-col sm:flex-row sm:items-start gap-[4px] sm:gap-[16px]'>
                 <FormLabel className='min-w-[134px] mt-[10px]'>電話番号2</FormLabel>
                 <div className='w-full flex gap-[8px]'>
                     <TextField
@@ -91,7 +91,7 @@ const CustomerForm = () => {
                         helperText={errors.phone_2 ? errors.phone_2 : ''}
                     />
                 </div>
-            </div>
+            </div> */}
 
             {/* ************************************************************************ */}
             <div className='flex flex-col sm:flex-row sm:items-start gap-[4px] sm:gap-[16px]'>
@@ -103,6 +103,7 @@ const CustomerForm = () => {
                         value={currentItem?.added_by?.email || ""}
                         onChange={e => dispatch(setCurrentItemValue({ email: e.target.value }))}
                         error={errors.email ? true : false}
+                        disabled={true}
                         helperText={errors.email ? errors.email : ''}
                     />
                 </div>
@@ -164,6 +165,55 @@ const CustomerForm = () => {
                                 disabled={true}
                                 error={errors.youtube_client_secret ? true : false}
                                 helperText={errors.youtube_client_secret ? errors.youtube_client_secret : ''}
+                            />
+                        </div>
+                    </div>
+                </>
+            )}
+
+
+
+            {currentItem?.provider === "INSTAGRAM" && (
+                <>
+                    <div className='flex flex-col sm:flex-row sm:items-start gap-[4px] sm:gap-[16px]'>
+                        <FormLabel className='min-w-[134px] mt-[10px]'>インスタグラムビジネスID</FormLabel>
+                        <div className='w-full flex gap-[8px]'>
+                            <TextField
+                                size='small'
+                                fullWidth
+                                value={currentItem?.instagram_business_id}
+                                onChange={e => dispatch(setCurrentItemValue({ ads: e.target.value }))}
+                                disabled={true}
+                                error={errors.instagram_business_id ? true : false}
+                                helperText={errors.instagram_business_id ? errors.instagram_business_id : ''}
+                            />
+                        </div>
+                    </div>
+                    <div className='flex flex-col sm:flex-row sm:items-start gap-[4px] sm:gap-[16px]'>
+                        <FormLabel className='min-w-[134px] mt-[10px]'>アプリID</FormLabel>
+                        <div className='w-full flex gap-[8px]'>
+                            <TextField
+                                size='small'
+                                fullWidth
+                                value={currentItem?.facebook_app_id}
+                                onChange={e => dispatch(setCurrentItemValue({ ads: e.target.value }))}
+                                disabled={true}
+                                error={errors?.facebook_app_id ? true : false}
+                                helperText={errors?.facebook_app_id ? errors.facebook_app_id : ''}
+                            />
+                        </div>
+                    </div>
+                    <div className='flex flex-col sm:flex-row sm:items-start gap-[4px] sm:gap-[16px]'>
+                        <FormLabel className='min-w-[134px] mt-[10px]'>クライアントシークレット</FormLabel>
+                        <div className='w-full flex gap-[8px]'>
+                            <TextField
+                                size='small'
+                                fullWidth
+                                value={currentItem?.facebook_client_secret}
+                                onChange={e => dispatch(setCurrentItemValue({ ads: e.target.value }))}
+                                disabled={true}
+                                error={errors.facebook_client_secret ? true : false}
+                                helperText={errors.facebook_client_secret ? errors.facebook_client_secret : ''}
                             />
                         </div>
                     </div>

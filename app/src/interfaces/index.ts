@@ -11,6 +11,10 @@ export interface IUser {
         name_furi: string;
         last_name_furi: string;
         first_name_furi: string;
+        is_youtube: boolean;
+        is_instagram: boolean;
+        is_tiktok: boolean;
+        is_twitter: boolean;
         phone: string;
         role: IRole;
     };

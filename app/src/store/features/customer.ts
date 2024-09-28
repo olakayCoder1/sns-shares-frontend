@@ -13,8 +13,12 @@ type State = {
             google_client_id: string;
             google_client_secret: string;
             google_project_id: string;
+            facebook_app_id:string,
+            facebook_client_secret:string,
+            instagram_business_id:string,
             password: string;
             ads: string;
+            is_active:boolean;
             status: number;
         };
         prev: number;
@@ -53,6 +57,10 @@ const initialState: State = {
             google_project_id: '',
             google_client_id: '',
             google_client_secret: '',
+            facebook_app_id:'',
+            instagram_business_id:'',
+            facebook_client_secret:'',
+            is_active:true,
             ads: '',
             status: 0,
         },

@@ -3,8 +3,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 type PostFormData = {
     title: string;
     description: string;
+    youtube_title: string;
+    youtube_description: string;
+    tiktok_description: string;
+    twitter_description: string;
+    instagram_description: string;
     is_youtube: boolean;
     is_tiktok: boolean;
+    is_twitter: boolean;
     is_instagram: boolean;
     instance_dispatch: boolean;
     date?: string;
@@ -21,9 +27,15 @@ const initialState: State = {
     form: {
         title: '',
         description: '',
-        is_youtube: true,
-        is_tiktok: true,
-        is_instagram: true,
+        youtube_title: '',
+        youtube_description: '',
+        tiktok_description: '',
+        twitter_description: '',
+        instagram_description: '',
+        is_youtube: false,
+        is_tiktok: false,
+        is_twitter: false,
+        is_instagram: false,
         instance_dispatch: true,
         date: '',
         time: '',

@@ -1,8 +1,9 @@
+'use client'
 import { FormEvent, useEffect, useState } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { deleteRequest, patchRequest } from '@/utils/axios';
+import { deleteRequest, patchRequest, getRequest } from '@/utils/axios';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { clearCurrentItem, clearError, fetchCustomer, setError } from '@/store/features/customer';
+import { clearCurrentItem, clearError, fetchCustomer, setError ,setCurrentItemValue} from '@/store/features/customer';
 
 import { Button, useMediaQuery } from '@mui/material';
 import AuthLayout from '@/components/templates/AuthLayout';
@@ -51,7 +52,32 @@ const CustomerEditPage = () => {
         const res = await deleteRequest(`/v0/customers/sns/${id}`, null);
         if (res.status == 200) {
             dispatch(clearError());
-            router.push('/customers');
+            router.push('/snsaccounts');
+        }
+    };
+
+
+    const handleDisable = async () => {
+        const res = await patchRequest(`/v0/customers/sns/${id}`, {is_active:!currentItem?.is_active});
+        dispatch(setCurrentItemValue({ is_active: !currentItem?.is_active }))
+        if (res.status == 200) {
+            dispatch(clearError());
+            setCurrentDialog('')
+            // router.push(`/snsaccounts/${id}`);
+        }
+    };
+
+
+    const handleRefreshToken = async () => {
+        const res = await getRequest(`/v0/customers/sns/${id}/refresh`);
+        if (res.status == 200) {
+            const { redirectUrl } = res.data;
+            if (redirectUrl) {
+                window.location.href = redirectUrl;
+            }
+            // router.push(`/snsaccounts/${id}`);
+        }else{
+            dispatch(setError(res.data));
         }
     };
 
@@ -70,7 +96,7 @@ const CustomerEditPage = () => {
 
                                 <div className='w-full mt-[16px] flex flex-col md:flex-row md:justify-between gap-[16px]'>
                                     <div className='flex gap-[8px]'>
-                                        <Button
+                                        {/* <Button
                                             type='button'
                                             variant='contained'
                                             color='inherit'
@@ -78,9 +104,9 @@ const CustomerEditPage = () => {
                                             disabled={prev == 0}
                                         >
                                             以前
-                                        </Button>
+                                        </Button> */}
 
-                                        <Button
+                                        {/* <Button
                                             type='button'
                                             variant='contained'
                                             color='inherit'
@@ -88,6 +114,16 @@ const CustomerEditPage = () => {
                                             disabled={next == 0}
                                         >
                                             次に
+                                        </Button> */}
+                                        <Button
+                                            type='button'
+                                            variant='contained'
+                                            color='inherit'
+                                            onClick={() => setCurrentDialog('disable')}
+                                            disabled={next == 0}
+                                        >
+                                            アカウントを無効にする  
+                                            {/* {currentItem?.is_active} */}
                                         </Button>
                                     </div>
 
@@ -99,6 +135,15 @@ const CustomerEditPage = () => {
                                             onClick={() => router.back()}
                                         >
                                             戻る
+                                        </Button>
+
+                                        <Button
+                                            type='button'
+                                            variant='contained'
+                                            color='inherit'
+                                            onClick={handleRefreshToken}
+                                        >
+                                            Refresh Token
                                         </Button>
 
                                         <Button type='submit' variant='contained' color='secondary'>
@@ -126,6 +171,13 @@ const CustomerEditPage = () => {
                                 open={currentDialog == 'delete'}
                                 onClose={() => setCurrentDialog('')}
                                 onConfirm={handleDelete}
+                                dialogType={''}
+                            />
+                            <ConfirmDialog
+                                open={currentDialog == 'disable'}
+                                onClose={() => setCurrentDialog('')}
+                                onConfirm={handleDisable}
+                                dialogType={'disable'}
                             />
                         </div>
                     </MainPannel>
